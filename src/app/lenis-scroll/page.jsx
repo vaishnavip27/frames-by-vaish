@@ -68,12 +68,13 @@ export default function Page() {
     <main>
       {/* Top spacer */}
       <div className="h-screen bg-white flex flex-col items-center justify-center">
-        <div className="text-8xl font-black">Parallex Lenis Scroll</div>
+        <div className="text-4xl md:text-8xl font-black">Parallax Lenis Scroll</div>
       </div>
 
       {/* Gallery */}
       <div ref={gallery} className="h-[200vh] overflow-hidden bg-white">
-        <div className="relative h-[250vh] flex gap-2 p-8">
+        {/* Mobile Gallery - 4 columns */}
+        <div className="relative h-[250vh] flex gap-2 p-4 md:hidden">
           <Column
             images={[
               images[0],
@@ -87,6 +88,7 @@ export default function Page() {
             className="-top-[30%]"
             opacity={opacity}
             scale={scale}
+            isMobile={true}
           />
           <Column
             images={[
@@ -96,12 +98,12 @@ export default function Page() {
               images[6],
               images[7],
               images[8],
-              images[2],
             ]}
             y={y2}
             className="-top-[70%]"
             opacity={opacity}
             scale={scale}
+            isMobile={true}
           />
           <Column
             images={[
@@ -111,12 +113,12 @@ export default function Page() {
               images[9],
               images[10],
               images[11],
-              images[2],
             ]}
             y={y3}
             className="-top-[30%]"
             opacity={opacity}
             scale={scale}
+            isMobile={true}
           />
           <Column
             images={[
@@ -131,65 +133,129 @@ export default function Page() {
             className="-top-[60%]"
             opacity={opacity}
             scale={scale}
-          />
-          <Column
-            images={[
-              images[6],
-              images[7],
-              images[8],
-              images[9],
-              images[10],
-              images[11],
-              images[2],
-            ]}
-            y={y1}
-            className="-top-[30%]"
-            opacity={opacity}
-            scale={scale}
-          />
-          <Column
-            images={[
-              images[3],
-              images[4],
-              images[5],
-              images[0],
-              images[1],
-              images[2],
-            ]}
-            y={y2}
-            className="-top-[70%]"
-            opacity={opacity}
-            scale={scale}
-          />
-          <Column
-            images={[
-              images[0],
-              images[1],
-              images[2],
-              images[9],
-              images[10],
-              images[11],
-              images[2],
-            ]}
-            y={y3}
-            className="-top-[30%]"
-            opacity={opacity}
-            scale={scale}
-          />
-          <Column
-            images={[
-              images[9],
-              images[10],
-              images[11],
-              images[3],
-              images[4],
-              images[5],
-            ]}
-            y={y4}
-            className="-top-[60%]"
+            isMobile={true}
             isLastColumn={true}
+          />
+        </div>
+
+        {/* Desktop Gallery - Original columns */}
+        <div className="relative h-[250vh] hidden md:flex gap-2 p-8">
+          <Column
+            images={[
+              images[0],
+              images[1],
+              images[2],
+              images[3],
+              images[4],
+              images[5],
+            ]}
+            y={y1}
+            className="-top-[30%]"
             opacity={opacity}
             scale={scale}
+          />
+          <Column
+            images={[
+              images[3],
+              images[4],
+              images[5],
+              images[6],
+              images[7],
+              images[8],
+              images[2],
+            ]}
+            y={y2}
+            className="-top-[70%]"
+            opacity={opacity}
+            scale={scale}
+          />
+          <Column
+            images={[
+              images[6],
+              images[7],
+              images[8],
+              images[9],
+              images[10],
+              images[11],
+              images[2],
+            ]}
+            y={y3}
+            className="-top-[30%]"
+            opacity={opacity}
+            scale={scale}
+          />
+          <Column
+            images={[
+              images[9],
+              images[10],
+              images[11],
+              images[0],
+              images[1],
+              images[2],
+            ]}
+            y={y4}
+            className="-top-[60%]"
+            opacity={opacity}
+            scale={scale}
+          />
+          <Column
+            images={[
+              images[6],
+              images[7],
+              images[8],
+              images[9],
+              images[10],
+              images[11],
+              images[2],
+            ]}
+            y={y1}
+            className="-top-[30%]"
+            opacity={opacity}
+            scale={scale}
+          />
+          <Column
+            images={[
+              images[3],
+              images[4],
+              images[5],
+              images[0],
+              images[1],
+              images[2],
+            ]}
+            y={y2}
+            className="-top-[70%]"
+            opacity={opacity}
+            scale={scale}
+          />
+          <Column
+            images={[
+              images[0],
+              images[1],
+              images[2],
+              images[9],
+              images[10],
+              images[11],
+              images[2],
+            ]}
+            y={y3}
+            className="-top-[30%]"
+            opacity={opacity}
+            scale={scale}
+          />
+          <Column
+            images={[
+              images[9],
+              images[10],
+              images[11],
+              images[3],
+              images[4],
+              images[5],
+            ]}
+            y={y4}
+            className="-top-[60%]"
+            opacity={opacity}
+            scale={scale}
+            isLastColumn={true}
           />
           <Column
             images={[
@@ -252,10 +318,11 @@ const Column = ({
   opacity,
   scale,
   isLastColumn = false,
+  isMobile = false,
 }) => {
   return (
     <motion.div
-      className={`relative h-full w-1/4 min-w-[110px] flex flex-col whitespace-nowrap ${className}`}
+      className={`relative h-full ${isMobile ? 'w-1/4 min-w-[75px]' : 'w-1/4 min-w-[110px]'} flex flex-col whitespace-nowrap ${className}`}
       style={{ y, opacity, scale }}
       initial={{ y: 0 }}
       key={isLastColumn ? "last-column" : undefined}
@@ -263,7 +330,7 @@ const Column = ({
       {images.map((src, i) => (
         <div
           key={i}
-          className="relative h-[200px] w-full rounded-lg overflow-hidden"
+          className={`relative ${isMobile ? 'h-[120px]' : 'h-[200px]'} w-full rounded-lg overflow-hidden`}
           style={{
             marginTop: i > 0 ? `calc(${i * 10}% + ${i * 0.2}vw)` : 0,
             opacity,
