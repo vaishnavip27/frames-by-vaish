@@ -330,7 +330,7 @@ const Column = ({
       {images.map((src, i) => (
         <div
           key={i}
-          className={`relative ${isMobile ? 'h-[120px]' : 'h-[200px]'} w-full rounded-lg overflow-hidden`}
+          className={`relative ${isMobile ? 'h-[170px]' : 'h-[200px]'} w-full rounded-lg overflow-hidden`}
           style={{
             marginTop: i > 0 ? `calc(${i * 10}% + ${i * 0.2}vw)` : 0,
             opacity,
