@@ -11,6 +11,10 @@ export default function Home() {
       title: "Cursor reveal effect",
       path: "/cursor-reveal",
     },
+    {
+      title: "Beam Toggle",
+      path: "/toggle",
+    },
   ];
 
   return (
