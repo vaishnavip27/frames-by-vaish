@@ -6,7 +6,10 @@ export default function Home() {
     {
       title: "Parallex scroll Slider",
       path: "/lenis-scroll",
-      experimenting: false,
+    },
+    {
+      title: "Cursor reveal effect",
+      path: "/cursor-reveal",
     },
   ];
 
