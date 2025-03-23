@@ -12,8 +12,8 @@ export default function Home() {
       path: "/cursor-reveal",
     },
     {
-      title: "Beam Toggle",
-      path: "/toggle",
+      title: "Horizontal Scroll",
+      path: "/horizontal-scroll",
     },
   ];
 
