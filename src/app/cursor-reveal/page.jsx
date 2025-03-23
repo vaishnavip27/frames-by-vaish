@@ -5,21 +5,19 @@ import { useState, useEffect } from "react";
 const Page = () => {
   const [position, setPosition] = useState({ x: 0, y: 0 });
   const [rotation, setRotation] = useState(0);
-  const [cursorSize, setCursorSize] = useState(40); // Initial smaller size
+  const [cursorSize, setCursorSize] = useState(40); 
   
-  // Fixed radius for the cursor circle - now dynamic
-  const baseCircleRadius = 30; // Smaller initial size
-  const expandedCircleRadius = 300; // Size when hovering over text
+  
+  const baseCircleRadius = 30; 
+  const expandedCircleRadius = 100;
   const circleRadius = cursorSize;
-  
-  // Text to revolve around the circle
+
   const revolvingText = "FOLLOW THE CURSOR • FOLLOW THE CURSOR • ";
   
   useEffect(() => {
     const handleMouseMove = (e) => {
       setPosition({ x: e.clientX, y: e.clientY });
-      
-      // Check if mouse is over the center text
+
       const centerText = document.querySelector('.center-text');
       if (centerText) {
         const rect = centerText.getBoundingClientRect();
@@ -29,7 +27,7 @@ const Page = () => {
           e.clientY >= rect.top && 
           e.clientY <= rect.bottom;
         
-        // Smoothly transition the cursor size
+ 
         setCursorSize(isOverText ? expandedCircleRadius : baseCircleRadius);
       }
     };
@@ -38,7 +36,7 @@ const Page = () => {
     return () => window.removeEventListener("mousemove", handleMouseMove);
   }, []);
   
-  // Animate the rotation
+ 
   useEffect(() => {
     const animateRotation = () => {
       setRotation(prev => (prev + 0.5) % 360);
@@ -51,7 +49,7 @@ const Page = () => {
 
   return (
     <div className="relative w-screen h-screen overflow-hidden bg-black">
-      {/* Bright text layer at the bottom */}
+
       <div className="absolute inset-0 flex items-center justify-center">
         <p 
           className="text-yellow-200/40 text-7xl font-bold px-6 py-3 center-text"
@@ -64,7 +62,7 @@ const Page = () => {
         </p>
       </div>
 
-      {/* Black overlay with circle cutout where cursor is */}
+
       <div
         className="absolute inset-0 bg-black pointer-events-none"
         style={{
@@ -82,7 +80,7 @@ const Page = () => {
         }}
       ></div>
       
-      {/* Optional: subtle glow effect around the cursor */}
+
       <div 
         className="absolute pointer-events-none"
         style={{
@@ -100,14 +98,14 @@ const Page = () => {
         }}
       ></div>
       
-      {/* Revolving text around the cursor */}
+
       <div 
         className="absolute pointer-events-none"
         style={{
           left: `${position.x}px`,
           top: `${position.y}px`,
           transform: `translate(-50%, -50%) rotate(${rotation}deg)`,
-          width: `${circleRadius * 2 + 50}px`, // Slightly larger than the circle
+          width: `${circleRadius * 2 + 50}px`, 
           height: `${circleRadius * 2 + 50}px`,
           transition: "width 0.2s ease-out, height 0.2s ease-out"
         }}
