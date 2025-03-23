@@ -11,10 +11,6 @@ export default function Home() {
       title: "Cursor reveal effect",
       path: "/cursor-reveal",
     },
-    {
-      title: "Horizontal Scroll",
-      path: "/horizontal-scroll",
-    },
   ];
 
   return (
