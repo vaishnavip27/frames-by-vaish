@@ -11,6 +11,10 @@ export default function Home() {
       title: "Cursor reveal effect",
       path: "/cursor-reveal",
     },
+    {
+      title: "Modern gallery",
+      path: "/modern-gallery",
+    },
   ];
 
   return (

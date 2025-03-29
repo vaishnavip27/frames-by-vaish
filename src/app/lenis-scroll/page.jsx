@@ -66,14 +66,13 @@ export default function Page() {
 
   return (
     <main>
-      {/* Top spacer */}
       <div className="h-screen bg-white flex flex-col items-center justify-center">
-        <div className="text-4xl md:text-8xl font-black">Parallax Lenis Scroll</div>
+        <div className="text-4xl md:text-8xl font-black">
+          Parallax Lenis Scroll
+        </div>
       </div>
 
-      {/* Gallery */}
       <div ref={gallery} className="h-[200vh] overflow-hidden bg-white">
-        {/* Mobile Gallery - 4 columns */}
         <div className="relative h-[250vh] flex gap-2 p-4 md:hidden">
           <Column
             images={[
@@ -138,7 +137,7 @@ export default function Page() {
           />
         </div>
 
-        {/* Desktop Gallery - Original columns */}
+        {/* for desktop */}
         <div className="relative h-[250vh] hidden md:flex gap-2 p-8">
           <Column
             images={[
@@ -305,7 +304,6 @@ export default function Page() {
         </div>
       </div>
 
-      {/* Bottom spacer */}
       <div className="h-screen bg-white"></div>
     </main>
   );
@@ -322,7 +320,9 @@ const Column = ({
 }) => {
   return (
     <motion.div
-      className={`relative h-full ${isMobile ? 'w-1/4 min-w-[75px]' : 'w-1/4 min-w-[110px]'} flex flex-col whitespace-nowrap ${className}`}
+      className={`relative h-full ${
+        isMobile ? "w-1/4 min-w-[75px]" : "w-1/4 min-w-[110px]"
+      } flex flex-col whitespace-nowrap ${className}`}
       style={{ y, opacity, scale }}
       initial={{ y: 0 }}
       key={isLastColumn ? "last-column" : undefined}
@@ -330,7 +330,9 @@ const Column = ({
       {images.map((src, i) => (
         <div
           key={i}
-          className={`relative ${isMobile ? 'h-[170px]' : 'h-[200px]'} w-full rounded-lg overflow-hidden`}
+          className={`relative ${
+            isMobile ? "h-[170px]" : "h-[200px]"
+          } w-full rounded-lg overflow-hidden`}
           style={{
             marginTop: i > 0 ? `calc(${i * 10}% + ${i * 0.2}vw)` : 0,
             opacity,
