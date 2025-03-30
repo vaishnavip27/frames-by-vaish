@@ -26,6 +26,6 @@
     "**/*.tsx",
     "src/app/horizontal-scroll/page.jsx",
     "src/app/modern-gallery/page.jsx"
-  ],
+, "src/app/cursor-trail/page.jsx"  ],
   "exclude": ["node_modules"]
 }

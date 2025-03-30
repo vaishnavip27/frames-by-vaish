@@ -15,6 +15,10 @@ export default function Home() {
       title: "Modern gallery",
       path: "/modern-gallery",
     },
+    {
+      title: "Cursor Image trail",
+      path: "/cursor-trail",
+    },
   ];
 
   return (
