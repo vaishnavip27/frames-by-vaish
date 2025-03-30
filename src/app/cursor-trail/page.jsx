@@ -6,21 +6,23 @@ import Lenis from "@studio-freight/lenis";
 
 const Page = () => {
   const cursorRef = useRef({ x: 0, y: 0 });
-  const trailRefs = useRef([]);
-  const cursorHistoryRef = useRef([]);
-  const [isCursorActive, setIsCursorActive] = useState(false);
+  const [trailImages, setTrailImages] = useState([]);
+  const trailIndex = useRef(0);
+  const intervalRef = useRef(null);
+  const isCursorMoving = useRef(false);
 
   const trailConfig = {
-    trailLength: 8,
-    imageSize: 200,
+    imageWidth: 190, 
+    imageHeight: 240, 
     images: [
-      "/images/image-1.jpg",
       "/images/image-2.jpg",
-      "/images/image-8.jpg",
+      "/images/image-7.jpg",
+      "/images/image-5.jpg",
       "/images/image-9.jpg",
       "/images/image-10.jpg",
     ],
-    spacing: 5,
+    delay: 100,
+    maxTrailLength: 10,
   };
 
   useEffect(() => {
@@ -34,84 +36,109 @@ const Page = () => {
   }, []);
 
   useEffect(() => {
-    let timeoutId;
-    cursorHistoryRef.current = Array(trailConfig.trailLength * trailConfig.spacing).fill({ x: 0, y: 0 });
+    const handleMouseMove = (e) => {
+      cursorRef.current = { x: e.clientX, y: e.clientY };
+      isCursorMoving.current = true;
 
-    const updateTrailPositions = () => {
-      trailRefs.current.forEach((element, index) => {
-        if (!element) return;
-        const historyIndex = Math.min(index * trailConfig.spacing, cursorHistoryRef.current.length - 1);
-        const targetPos = cursorHistoryRef.current[historyIndex];
+      if (!intervalRef.current) {
+        intervalRef.current = setInterval(() => {
+          if (!isCursorMoving.current) return;
 
-        gsap.to(element, {
-          x: targetPos.x,
-          y: targetPos.y,
-          opacity: isCursorActive ? 1 : 0,
-          scale: isCursorActive ? 1 : 0.5,
-          duration: 0.2,
-          ease: "power2.out",
-        });
-      });
+          setTrailImages((prev) => {
+            const newTrail = [
+              ...prev,
+              {
+                id: Date.now(),
+                x: cursorRef.current.x,
+                y: cursorRef.current.y,
+                src: trailConfig.images[
+                  trailIndex.current % trailConfig.images.length
+                ],
+              },
+            ];
+            trailIndex.current++;
+
+            return newTrail.length > trailConfig.maxTrailLength
+              ? newTrail.slice(-trailConfig.maxTrailLength)
+              : newTrail;
+          });
+        }, trailConfig.delay);
+      }
     };
 
-    const handleMouseMove = (e) => {
-      if (!isCursorActive) setIsCursorActive(true);
-      cursorRef.current = { x: e.clientX, y: e.clientY };
-      cursorHistoryRef.current.unshift({ x: e.clientX, y: e.clientY });
-      cursorHistoryRef.current.pop();
-      updateTrailPositions();
-
-      clearTimeout(timeoutId);
-      timeoutId = setTimeout(() => setIsCursorActive(false), 500);
+    const handleMouseStop = () => {
+      isCursorMoving.current = false;
+      clearInterval(intervalRef.current);
+      intervalRef.current = null;
     };
 
     window.addEventListener("mousemove", handleMouseMove);
+    window.addEventListener("mouseleave", handleMouseStop);
     return () => {
       window.removeEventListener("mousemove", handleMouseMove);
-      clearTimeout(timeoutId);
+      window.removeEventListener("mouseleave", handleMouseStop);
+      clearInterval(intervalRef.current);
     };
-  }, [isCursorActive]);
+  }, []);
 
-  const createTrailImages = () => {
-    return Array.from({ length: trailConfig.trailLength }).map((_, index) => {
-      const imageIndex = index % trailConfig.images.length;
-      return (
-        <img
-          key={index}
-          ref={(el) => (trailRefs.current[index] = el)}
-          src={trailConfig.images[imageIndex]}
-          className="absolute pointer-events-none z-30 rounded-md object-cover"
-          style={{
-            width: `${trailConfig.imageSize}px`,
-            height: `${trailConfig.imageSize}px`,
-            transform: "translate(-50%, -50%) scale(0.5)",
-            opacity: 0,
-            position: "absolute",
-            top: 0,
-            left: 0,
-          }}
-        />
-      );
+  useEffect(() => {
+    trailImages.forEach((img, index) => {
+      gsap.to(`#img-${img.id}`, {
+        opacity: index === trailImages.length - 1 ? 1 : 0.8, 
+        scale: 1 - index * 0.01, 
+        duration: 0,
+        ease: "power2.inOut",
+      });
     });
-  };
+  }, [trailImages]);
 
   return (
     <div className="relative min-h-screen overflow-hidden bg-black">
+      {/* Background Grid */}
       <div className="absolute inset-0 z-0">
         <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
           <defs>
-            <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
-              <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#f5f5f5" strokeWidth="1" />
+            <pattern
+              id="grid"
+              width="40"
+              height="40"
+              patternUnits="userSpaceOnUse"
+            >
+              <path
+                d="M 40 0 L 0 0 0 40"
+                fill="none"
+                stroke="#f5f5f5"
+                strokeWidth="1"
+              />
             </pattern>
           </defs>
           <rect width="100%" height="100%" fill="url(#grid)" />
         </svg>
       </div>
-      <div className="absolute inset-0 bg-gradient-to-tl from-black/90 via-black/80 to-black/50 z-10"></div>
+      <div className="absolute inset-0 bg-gradient-to-tl from-black/100 via-black/90 to-black/80 z-10"></div>
       <div className="relative z-20 flex items-center justify-center min-h-screen">
-        <h1 className="text-7xl font-black text-white/20">MOVE YOUR CURSOR AROUND!</h1>
+        <h1 className="text-7xl font-black tracking-tighter text-white/20">
+          MOVE YOUR CURSOR AROUND!
+        </h1>
       </div>
-      {createTrailImages()}
+      {/* Image Trail */}
+      {trailImages.map((img, index) => (
+        <img
+          key={img.id}
+          id={`img-${img.id}`}
+          src={img.src}
+          className="absolute pointer-events-none z-30 object-cover"
+          style={{
+            width: `${trailConfig.imageWidth}px`,
+            height: `${trailConfig.imageHeight}px`,
+            transform: "translate(-50%, -50%)",
+            opacity: index === trailImages.length - 1 ? 1 : 0.8,
+            position: "absolute",
+            top: img.y,
+            left: img.x,
+          }}
+        />
+      ))}
     </div>
   );
 };
