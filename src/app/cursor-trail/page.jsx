@@ -10,7 +10,6 @@ const Page = () => {
   const trailIndex = useRef(0);
   const intervalRef = useRef(null);
   const isCursorMoving = useRef(false);
-  const hasMoved = useRef(false); // Track first movement
 
   const trailConfig = {
     imageWidth: 190,
@@ -23,7 +22,7 @@ const Page = () => {
       "/images/image-10.jpg",
     ],
     delay: 100,
-    maxTrailLength: 10,
+    maxTrailLength: 16,
   };
 
   useEffect(() => {
@@ -38,10 +37,6 @@ const Page = () => {
 
   useEffect(() => {
     const handleMouseMove = (e) => {
-      if (!hasMoved.current) {
-        hasMoved.current = true; // Mark that the cursor has moved
-      }
-
       cursorRef.current = { x: e.clientX, y: e.clientY };
       isCursorMoving.current = true;
 
@@ -50,21 +45,12 @@ const Page = () => {
           if (!isCursorMoving.current) return;
 
           setTrailImages((prev) => {
-            const angle = Math.random() * Math.PI * 2;
-            const speed = Math.random() * 6 + 3;
-            const velocity = {
-              x: Math.cos(angle) * speed,
-              y: Math.sin(angle) * speed,
-            };
-
             const newTrail = [
               ...prev,
               {
                 id: Date.now(),
                 x: cursorRef.current.x,
                 y: cursorRef.current.y,
-                vx: velocity.x,
-                vy: velocity.y,
                 src: trailConfig.images[
                   trailIndex.current % trailConfig.images.length
                 ],
@@ -98,12 +84,10 @@ const Page = () => {
   useEffect(() => {
     trailImages.forEach((img, index) => {
       gsap.to(`#img-${img.id}`, {
-        x: `+=${img.vx * 10}`,
-        y: `+=${img.vy * 10}`,
-        opacity: 0,
-        scale: 0.8,
-        duration: 1.5,
-        ease: "power2.out",
+        opacity: index === trailImages.length - 1 ? 1 : 0.8,
+        scale: 1 - index * 0.01,
+        duration: 0,
+        ease: "power2.inOut",
       });
     });
   }, [trailImages]);
@@ -138,24 +122,23 @@ const Page = () => {
         </h1>
       </div>
       {/* Image Trail */}
-      {hasMoved.current && // Show images only after cursor moves
-        trailImages.map((img) => (
-          <img
-            key={img.id}
-            id={`img-${img.id}`}
-            src={img.src}
-            className="absolute pointer-events-none z-30 object-cover"
-            style={{
-              width: `${trailConfig.imageWidth}px`,
-              height: `${trailConfig.imageHeight}px`,
-              transform: "translate(-50%, -50%)",
-              opacity: 1,
-              position: "absolute",
-              top: img.y,
-              left: img.x,
-            }}
-          />
-        ))}
+      {trailImages.map((img, index) => (
+        <img
+          key={img.id}
+          id={`img-${img.id}`}
+          src={img.src}
+          className="absolute pointer-events-none z-30 object-cover"
+          style={{
+            width: `${trailConfig.imageWidth}px`,
+            height: `${trailConfig.imageHeight}px`,
+            transform: "translate(-50%, -50%)",
+            opacity: index === trailImages.length - 1 ? 1 : 0.8,
+            position: "absolute",
+            top: img.y,
+            left: img.x,
+          }}
+        />
+      ))}
     </div>
   );
 };
