@@ -32,8 +32,8 @@ export default function Home() {
           target="_blank"
           rel="noopener noreferrer"
         >
-          <button className="bg-black text-white py-3 px-5 rounded-sm hover:bg-slate-950/80 cursor-pointer">
-            Star on Github
+          <button className="bg-black text-white py-3 px-10 rounded-xl hover:bg-slate-950/80 cursor-pointer">
+            Contribute
           </button>
         </Link>
       </div>
