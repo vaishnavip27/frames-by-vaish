@@ -19,6 +19,10 @@ export default function Home() {
       title: "Cursor Image trail",
       path: "/cursor-trail",
     },
+    {
+      title: "Cursor Image trail",
+      path: "/experiment",
+    },
   ];
 
   return (
